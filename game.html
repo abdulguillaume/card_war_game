@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+
+  [id=p1], [id=p2]{
+    width: 400px;
+    background: yellow;
+    border: 1px solid black;
+    }
+
+    #gameArea{
+      width: 400px;
+      min-height: 100px;
+      background: green;
+      border: 1px solid black;
+      }
+
+      #msgPlayer{
+        color: red;
+      }
+  </style>
+  <script language="JavaScript" src="myprototypes.js"></script>
+  <script language="JavaScript" src="game.js"></script>
+  </head>
+  <body>
+
+
+<div id="p1">
+  <div class="name"></div>
+
+  Taken cards:
+  <div class="taken">
+
+  </div>
+
+  Deck:
+  <div class="deck">
+
+  </div>
+
+  <div class="play">
+    <input type="button" value="play" onclick="play(p1)">
+  </div>
+</div>
+
+
+
+<div id="p2" style="position: relative">
+  <div class="name"></div>
+
+  Taken cards:
+  <div class="taken"></div>
+
+  Deck:
+  <div class="deck"></div>
+
+  <div class="play">
+    <input type="button" value="play" onclick="play(p2)">
+  </div>
+</div>
+
+<div id="gameArea">
+
+</div>
+
+<br>
+
+<span id="msgPlayer">
+</span>
+
+<span id="reset">
+  <input type="button" value="Start New Game" onclick="resetGame()">
+</span>
+
+<div id="footer">
+  This page is copyright protected. &copy; &#128522;
+</div>
+
+
+  </body>
+
+  </html>
