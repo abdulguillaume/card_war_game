@@ -5,7 +5,7 @@ var rankings = {2:'two', 3:'three', 4:'four', 5:'five', 6:'six', 7:'seven', 8:'e
           10:'ten', 11:'jack', 12:'queen', 13:'king', 14:'ace'}
 
 var card_min_value = 2;
-var card_max_value = 3;//14;
+var card_max_value = 14;
 
 //indicating which player goes first
 var player_to_start_game = 0;
@@ -94,34 +94,52 @@ function Player(name)
       if(this.game ==null || this.game.players.length < 2)
       {
         displayInnerHtml('msgPlayer', 'Need at least 2 players!');
-        return;
+        /*return [{
+          displayArea: 'msgPlayer',
+          message: 'Need at least 2 players!'
+        }]*/
       }
 
       if(playing_pos == null)
       {
         displayInnerHtml('msgPlayer', 'Need to register to the game!');
-        return;
+        /*return [{
+          displayArea: 'msgPlayer',
+          message: 'Need to register to the game!'
+        }]*/
       }
 
       if(playing_pos === this.game.getToken())
       {
         //if no card left? player lost if oponent has all the cards, otherwise deck reshuffle
-        if(this.deck.cards.length===0 && this.unshuffled.cards.length===0)
+        if(this.deck.count()==0 && this.unshuffled.cards.length==0)
         {
           var str = this.name + ' has lost!';
           displayInnerHtml('msgPlayer', str);
+          /*return [{
+            displayArea: 'msgPlayer',
+            message: str
+          }]*/
           return;
         }
-        else if(this.deck.cards.length===0 && this.unshuffled.cards.length > 0)
+        else if(this.deck.count()==0 && this.unshuffled.cards.length > 0)
         {
           var str = this.name + ' \'s deck reshuffled - Resume the game!';
+
           setTimeout(function(){
-            displayInnerHtml('msgPlayer', str);
+            //displayInnerHtml('msgPlayer', str);
+            alert(str);
+            /*return [{
+              displayArea: 'msgPlayer',
+              message: str
+            }]*/
           }, 1000);
 
           this.unshuffled.shuffle();
           helper_pushArrayToArray(this.deck.cards, this.unshuffled.cards.splice(0));
-          return;
+          //return;
+
+
         }
 
         this.game.push( this.deck.pop() );
@@ -167,6 +185,10 @@ function Game(deck)
     //message to player
     var str = 'Hand to '+this.players[token].name+'!';
     displayInnerHtml('msgPlayer', str);
+    /*return {
+      displayArea: 'msgPlayer',
+      message: str
+    }*/
   }
 
   this.add = function Add(player)
@@ -192,6 +214,14 @@ function Game(deck)
     //Personalized message to start the game
     var str = 'The Game has started! - ' + this.players[token].name + ' goes first!';
     displayInnerHtml('msgPlayer', str);
+    /*return [{
+      displayArea: 'msgPlayer',
+      message: str
+    }, {
+      displayArea: 'gameArea',
+      message: ''
+    }
+  ]*/
 
     //clear the GameMessageArea
     displayInnerHtml('gameArea', '');
@@ -223,7 +253,7 @@ function Game(deck)
 
   this.sendToPlayerDeck = function SendToPlayerDeck()
   {
-    var deck_size = this.splicedDeck.cards.length;
+    var deck_size = this.splicedDeck.count();
 
     if(deck_size > 0 && !this.isWar)
     {
@@ -243,27 +273,45 @@ function Game(deck)
         isWarCounter=0;
       }
 
+      /*return [{
+        displayArea: 'gameArea',
+        message: this.msg
+      }]*/
       return;
     }
 
 
     var tmp_cards = this.splicedDeck.cards.slice(0);
 
+    //var tmp_msg = this.msg;
+
     if(deck_size%2==0 &&
       tmp_cards[deck_size-1].ranking > tmp_cards[deck_size - 2].ranking)
     {
-      this.splicedDeck.cards = new Array();
+      //this.splicedDeck.cards = new Array();
 
       helper_pushArrayToArray(this.players[token].unshuffled.cards, tmp_cards);
+
+      this.msg = '+' + this.splicedDeck.count() + ' for ' + this.players[token].name
+      + '<br>------<br>' + this.msg;
+      displayInnerHtml("gameArea", this.msg);
+
+      this.splicedDeck.cards = new Array();
 
       this.msg = '';
     }
     else if(deck_size%2==0 &&
       tmp_cards[deck_size-1].ranking < tmp_cards[deck_size - 2].ranking)
     {
-      this.splicedDeck.cards = new Array();
+      //this.splicedDeck.cards = new Array();
 
       helper_pushArrayToArray(this.players[(token - 1)%deck_size].unshuffled.cards, tmp_cards);
+
+      this.msg = '+' + this.splicedDeck.count() + ' for ' + this.players[(token - 1)%deck_size].name
+      + '<br>------<br>' + this.msg;
+      displayInnerHtml("gameArea", this.msg);
+
+      this.splicedDeck.cards = new Array();
 
       this.msg = '';
     }
@@ -274,7 +322,16 @@ function Game(deck)
       this.msg = ' ------ WAR!!! ------ ' +
         '<br>' + this.msg;
       displayInnerHtml("gameArea", this.msg);
+      /*return [{
+        displayArea: 'gameArea',
+        message: this.msg
+      }]*/
     }
+
+    /*return [{
+      displayArea: 'gameArea',
+      message: tmp_msg
+    }]*/
 
   }
 }

@@ -37,6 +37,7 @@ function play(player)
       players[player.id].play();
 
       displayInfoIU();
+
 }
 
 function resetGame()
@@ -86,3 +87,9 @@ function score(key)
   div1[0].textContent = players[key].unshuffled.count();
   div2[0].textContent = players[key].deck.count();
 }
+
+/*function displayInnerHtml(elt, str)
+{
+  var innerElt = document.getElementById(elt);
+  innerElt.innerHTML = str;
+}*/
